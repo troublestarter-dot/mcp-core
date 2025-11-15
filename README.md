@@ -14,6 +14,23 @@
 
 ## Быстрый старт
 
+### За 3 шага:
+
+1. **Клонируйте и установите зависимости:**
+```bash
+git clone https://github.com/troublestarter-dot/mcp-core.git
+cd mcp-core
+pip install -r requirements.txt
+```
+
+2. **Запустите сервер:**
+```bash
+./start.sh
+```
+
+3. **Откройте документацию API:**
+Перейдите на http://localhost:8000/docs
+
 ### Локальная установка
 
 1. Клонируйте репозиторий:
@@ -177,7 +194,23 @@ pip install -r requirements.txt
 ### Запуск в режиме разработки
 
 ```bash
+# Используйте скрипт start.sh
+./start.sh
+
+# Или напрямую с uvicorn
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Тестирование API
+
+Запустите автоматические тесты для проверки работоспособности API:
+
+```bash
+# Убедитесь, что сервер запущен, затем в другом терминале:
+./test_api.sh
+
+# Или протестируйте удаленный сервер:
+./test_api.sh https://your-app.onrender.com
 ```
 
 ## Лицензия
