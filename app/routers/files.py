@@ -16,7 +16,7 @@ UPLOAD_DIR = Path(settings.file_storage_path)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 
-@router.post("/upload", response_model=FileResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/upload", response_model=FileResponse, status_code=status.HTTP_201_CREATED, response_model_by_alias=True)
 async def upload_file(file: UploadFile = FastAPIFile(...), db: Session = Depends(get_db)):
     """Upload a file to the server."""
     try:
@@ -40,12 +40,13 @@ async def upload_file(file: UploadFile = FastAPIFile(...), db: Session = Depends
         file_size = file_path.stat().st_size
         
         # Create database record
-        db_file = File(
-            filename=file.filename,
-            filepath=str(file_path),
-            file_type=file.content_type,
-            file_size=file_size
-        )
+        file_data = {
+            "filename": file.filename,
+            "filepath": str(file_path),
+            "file_type": file.content_type,
+            "file_size": file_size
+        }
+        db_file = File(**file_data)
         db.add(db_file)
         db.commit()
         db.refresh(db_file)
@@ -55,14 +56,14 @@ async def upload_file(file: UploadFile = FastAPIFile(...), db: Session = Depends
         raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
 
 
-@router.get("/", response_model=List[FileResponse])
+@router.get("/", response_model=List[FileResponse], response_model_by_alias=True)
 def list_files(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """List all files with pagination."""
     files = db.query(File).offset(skip).limit(limit).all()
     return files
 
 
-@router.get("/{file_id}", response_model=FileResponse)
+@router.get("/{file_id}", response_model=FileResponse, response_model_by_alias=True)
 def get_file(file_id: int, db: Session = Depends(get_db)):
     """Get file metadata by ID."""
     file = db.query(File).filter(File.id == file_id).first()

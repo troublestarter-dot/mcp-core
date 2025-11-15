@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, Dict, Any
 from datetime import datetime
 
@@ -20,13 +20,15 @@ class CardUpdate(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 
-class CardResponse(CardBase):
+class CardResponse(BaseModel):
     id: int
+    title: str
+    content: Optional[str] = None
+    metadata: Optional[Dict[str, Any]] = Field(None, validation_alias="meta_data", serialization_alias="metadata")
     created_at: datetime
     updated_at: Optional[datetime] = None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 # Event schemas
@@ -41,12 +43,15 @@ class EventCreate(EventBase):
     pass
 
 
-class EventResponse(EventBase):
+class EventResponse(BaseModel):
     id: int
+    name: str
+    description: Optional[str] = None
+    event_type: str
+    metadata: Optional[Dict[str, Any]] = Field(None, validation_alias="meta_data", serialization_alias="metadata")
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 # File schemas
@@ -56,11 +61,13 @@ class FileBase(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 
-class FileResponse(FileBase):
+class FileResponse(BaseModel):
     id: int
+    filename: str
     filepath: str
+    file_type: Optional[str] = None
     file_size: Optional[int] = None
+    metadata: Optional[Dict[str, Any]] = Field(None, validation_alias="meta_data", serialization_alias="metadata")
     created_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)

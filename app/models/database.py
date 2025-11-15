@@ -11,7 +11,7 @@ class Card(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    meta_data = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
@@ -25,7 +25,7 @@ class Event(Base):
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     event_type = Column(String(100), nullable=False)
-    metadata = Column(JSON, nullable=True)
+    meta_data = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -39,5 +39,5 @@ class File(Base):
     filepath = Column(String(500), nullable=False)
     file_type = Column(String(100), nullable=True)
     file_size = Column(Integer, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    meta_data = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

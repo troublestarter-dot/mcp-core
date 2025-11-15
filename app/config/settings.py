@@ -5,7 +5,7 @@ from typing import List
 class Settings(BaseSettings):
     """Application configuration settings."""
     
-    database_url: str = "postgresql://user:password@localhost:5432/mcp_core"
+    database_url: str = "sqlite:///./mcp_core.db"
     secret_key: str = "your-secret-key-here"
     debug: bool = True
     allowed_origins: str = "*"
